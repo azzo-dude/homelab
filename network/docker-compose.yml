@@ -1,14 +1,29 @@
+version: '3.8'
+
 services:
   portainer:
     image: portainer/portainer-ce:latest
     container_name: portainer
     restart: always
-    ports:
-      - "9443:9443" # Portainer UI (HTTPS)
-      - "8000:8000" # Edge Agent communications (optional)
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
+    networks:
+      - portainer-net
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared-tunnel
+    restart: always
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      - portainer
+    networks:
+      - portainer-net
 
 volumes:
   portainer_data:
+
+networks:
+  portainer-net:
+    driver: bridge
