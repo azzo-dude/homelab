@@ -1,5 +1,5 @@
 # --- GLOBAL VARIABLES (LOCALS) ---
-# Define all your common settings here for easy access
+
 locals {
   # --- Proxmox API Credentials ---
   # WARNING: Hardcoding secrets is a security risk!
